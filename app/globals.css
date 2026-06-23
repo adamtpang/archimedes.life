@@ -2,26 +2,138 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* warm-ink + gold system — dark only */
+    --background: 30 11% 4%;
+    --foreground: 40 24% 92%;
+
+    --card: 30 9% 6%;
+    --card-foreground: 40 24% 92%;
+    --popover: 30 9% 6%;
+    --popover-foreground: 40 24% 92%;
+
+    --primary: 38 92% 58%;
+    --primary-foreground: 30 35% 6%;
+
+    --secondary: 30 7% 11%;
+    --secondary-foreground: 40 24% 92%;
+
+    --muted: 30 7% 11%;
+    --muted-foreground: 36 8% 56%;
+
+    --accent: 30 7% 13%;
+    --accent-foreground: 40 24% 92%;
+
+    --destructive: 4 70% 56%;
+    --destructive-foreground: 40 24% 96%;
+
+    --border: 36 9% 15%;
+    --input: 36 9% 17%;
+    --ring: 38 92% 58%;
+
+    --radius: 0.6rem;
+
+    /* the one accent */
+    --lever: 38 94% 58%;
+    --lever-dim: 36 50% 34%;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "cv11", "ss01";
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: hsl(var(--lever));
+    color: hsl(var(--primary-foreground));
+  }
+
+  /* Tabular-ish mono caps used as labels */
+  .label {
+    @apply font-mono uppercase tracking-[0.22em];
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* faint engineering grid that lives behind everything */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, hsl(var(--foreground)) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--foreground)) 1px, transparent 1px);
+    background-size: 72px 72px;
+    background-position: center;
+    mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, #000 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 90% 60% at 50% 0%, #000 30%, transparent 75%);
+  }
+}
+
+/* ---- motion ---- */
+
+.reveal {
+  animation: reveal-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* the lever beam gently works the load */
+.lever-beam {
+  transform-box: view-box;
+  transform-origin: 264px 150px;
+  transform: rotate(-5deg);
+  filter: drop-shadow(0 0 16px hsl(var(--lever) / 0.28));
+  animation: lever-rock 7s ease-in-out infinite;
+}
+
+@keyframes lever-rock {
+  0%,
+  100% {
+    transform: rotate(-6.5deg);
+  }
+  50% {
+    transform: rotate(3.5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .lever-beam {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  html {
+    scroll-behavior: auto;
   }
 }

@@ -1,0 +1,107 @@
+"use client";
+
+import * as React from "react";
+import { ArrowRight, Check } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+// ---------------------------------------------------------------------------
+// TODO(launch): wire this to a real capture endpoint before go-live.
+// Fastest path: create a form at https://formspree.io and paste its endpoint
+// below, e.g. "https://formspree.io/f/abcdwxyz". While this stays null, the
+// form validates and acknowledges in-browser but does NOT persist anywhere.
+// ---------------------------------------------------------------------------
+const FORMSPREE_ENDPOINT: string | null = null;
+
+type Status = "idle" | "invalid" | "submitting" | "done" | "error";
+
+const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+export function EmailCapture() {
+  const [email, setEmail] = React.useState("");
+  const [status, setStatus] = React.useState<Status>("idle");
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const value = email.trim();
+
+    if (!EMAIL_RE.test(value)) {
+      setStatus("invalid");
+      return;
+    }
+
+    setStatus("submitting");
+    try {
+      if (FORMSPREE_ENDPOINT) {
+        const res = await fetch(FORMSPREE_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ email: value }),
+        });
+        if (!res.ok) throw new Error("Request failed");
+      }
+      // No endpoint wired yet — still acknowledge so the experience is complete.
+      setStatus("done");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  if (status === "done") {
+    return (
+      <div className="flex items-center gap-3 rounded-lg border border-lever/30 bg-lever/10 px-4 py-3.5 text-sm">
+        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-lever text-background">
+          <Check className="h-3 w-3" strokeWidth={3} />
+        </span>
+        <span className="text-foreground">
+          On the list. We&rsquo;ll send your diagnosis the day the doors open.
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} noValidate className="w-full">
+      <div className="flex flex-col gap-2.5 sm:flex-row">
+        <Input
+          type="email"
+          inputMode="email"
+          autoComplete="email"
+          required
+          placeholder="you@where.you.build"
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value);
+            if (status !== "idle") setStatus("idle");
+          }}
+          aria-label="Email address"
+          aria-invalid={status === "invalid"}
+          className="h-12 flex-1 border-border bg-secondary/40 text-base placeholder:text-muted-foreground/60 focus-visible:ring-lever"
+        />
+        <Button
+          type="submit"
+          disabled={status === "submitting"}
+          className="group h-12 gap-2 px-6 text-base font-semibold"
+        >
+          {status === "submitting" ? "Sending…" : "Get diagnosed"}
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+        </Button>
+      </div>
+      <p className="mt-2.5 min-h-4 text-xs">
+        {status === "invalid" ? (
+          <span className="text-destructive">Enter a valid email address.</span>
+        ) : status === "error" ? (
+          <span className="text-destructive">Something went wrong &mdash; try again.</span>
+        ) : (
+          <span className="text-muted-foreground/70">
+            One lever-sharpening email when we open. No spam, ever.
+          </span>
+        )}
+      </p>
+    </form>
+  );
+}
