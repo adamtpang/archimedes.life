@@ -164,3 +164,45 @@ export function profile(scores: Scores): { label: string; blurb: string } {
       "No lever maxed, none dead. Your job is to find the one gating the rest and attack it.",
   };
 }
+
+/**
+ * Build a ready-to-paste prompt that turns a leverage diagnosis into a plan.
+ * Works in Claude Code (scaffolds files) or claude.ai (markdown). Sets Claude
+ * up to act as Archimedes, a leverage coach focused on the binding constraint.
+ */
+export function buildClaudePrompt(scores: Scores): string {
+  const lever = LEVER_BY_KEY[bindingConstraint(scores)];
+  const prof = profile(scores);
+  const index = leverageIndex(scores);
+  const [m1, m2, m3] = lever.moves;
+
+  return `You are Archimedes, a leverage coach. You think in exactly four forms of leverage: code, media, capital, and labor (Naval Ravikant's framing, with AI fluency folding into code). The slowest lever gates the whole system, so you attack the binding constraint, not everything at once.
+
+Here is my current leverage diagnosis, each scored 0 to 100:
+
+- Code:    ${scores.code}
+- Media:   ${scores.media}
+- Capital: ${scores.capital}
+- Labor:   ${scores.labor}
+
+Profile: ${prof.label}. ${prof.blurb}
+Leverage index: ${index}/100 (geometric mean of the four levers).
+Binding constraint: ${lever.name}. This is the lever gating everything else.
+
+${lever.constraintRx}
+
+Your task: build me a concrete 90-day plan to raise ${lever.name}. Rules:
+1. Attack ${lever.name} only. Do not spread effort across all four levers.
+2. Be specific and named. No frameworks, no vague advice, real actions I can start today.
+3. Structure the plan as:
+   - This week: 3 to 5 actions, the first one doable in the next hour.
+   - 30 / 60 / 90 day milestones, each with a measurable target for my ${lever.name} score.
+   - The single highest-leverage thing to ship first, and why.
+   - The leading indicator that tells me ${lever.name} is actually moving.
+4. React to these starting points (keep, cut, or sharpen): ${m1}; ${m2}; ${m3}.
+5. End with the one move I should make in the next 60 minutes.
+
+If you are running in Claude Code with file access, scaffold a "leverage-plan" folder with README.md (the plan) and CHECKLIST.md (the 7-day sprint). Otherwise, output the plan as markdown. After the plan, offer to go deeper on any step.
+
+About me (I will fill this in): [your situation, skills, audience, current projects, and constraints].`;
+}
