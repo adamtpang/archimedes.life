@@ -1,40 +1,10 @@
+import { ArrowDown } from "lucide-react";
+
+import { Diagnostic } from "@/components/diagnostic";
 import { EmailCapture } from "@/components/email-capture";
 import { FulcrumGlyph, LeverMark } from "@/components/lever-mark";
-
-type Lever = {
-  id: string;
-  name: string;
-  symptom: string;
-  cure: string;
-};
-
-const LEVERS: Lever[] = [
-  {
-    id: "01",
-    name: "Code",
-    symptom:
-      "You still do by hand what a script would do ten thousand times — for free, while you sleep.",
-    cure: "Software that keeps working the day you stop showing up.",
-  },
-  {
-    id: "02",
-    name: "Media",
-    symptom: "Your best thinking reaches the same room it reached last year.",
-    cure: "Publish once; be heard at the scale of the whole internet.",
-  },
-  {
-    id: "03",
-    name: "Capital",
-    symptom: "Every dollar dies the moment you stop trading hours to earn it.",
-    cure: "Money that compounds while you sleep, not only while you work.",
-  },
-  {
-    id: "04",
-    name: "Labor",
-    symptom: "You are the bottleneck on every task only you know how to do.",
-    cure: "A team that turns one pair of hands into many.",
-  },
-];
+import { Button } from "@/components/ui/button";
+import { LEVERS } from "@/lib/levers";
 
 type Step = {
   id: string;
@@ -46,17 +16,17 @@ const STEPS: Step[] = [
   {
     id: "01",
     name: "Diagnose",
-    body: "We map where your leverage leaks — which levers you pull hard, which you ignore, and what the gap is quietly costing you.",
+    body: "Rate your four levers and surface the one gating the rest. You just did this above.",
   },
   {
     id: "02",
     name: "Prescribe",
-    body: "One specific move per lever. Not a framework. Not a course. The next concrete action, named — and the order to take them in.",
+    body: "Get one concrete move for your binding constraint. Not a framework. Not a course. The next action, named.",
   },
   {
     id: "03",
     name: "Compound",
-    body: "Pull the weak lever. Re-measure. Repeat — until small inputs move loads that used to be out of the question.",
+    body: "Pull the weak lever. Re-measure. Repeat until small inputs move loads that used to be out of the question.",
   },
 ];
 
@@ -117,12 +87,30 @@ export default function Page() {
           className="reveal mt-5 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg"
           style={{ animationDelay: "250ms" }}
         >
-          We find the four levers you&rsquo;re under-using — code, media,
-          capital, labor — and prescribe the one move that pulls each.
+          We find the four levers you&rsquo;re under-using: code, media, capital,
+          labor. Then we prescribe the one move that pulls each.
         </p>
 
-        <div className="reveal mt-10 max-w-md" style={{ animationDelay: "330ms" }}>
-          <EmailCapture />
+        <div
+          className="reveal mt-10 flex flex-wrap items-center gap-3"
+          style={{ animationDelay: "330ms" }}
+        >
+          <Button
+            asChild
+            className="h-12 gap-2 px-6 text-base font-semibold"
+          >
+            <a href="#diagnostic">
+              Run your diagnosis
+              <ArrowDown className="h-4 w-4" />
+            </a>
+          </Button>
+          <Button
+            asChild
+            variant="ghost"
+            className="h-12 px-5 text-base text-muted-foreground hover:bg-secondary/50 hover:text-foreground"
+          >
+            <a href="#levers">See the four levers</a>
+          </Button>
         </div>
       </section>
 
@@ -135,7 +123,7 @@ export default function Page() {
           &ldquo;Give me a lever long enough and a place to stand, and I will
           move the world.&rdquo;
           <cite className="mt-3 block font-mono text-xs not-italic uppercase tracking-[0.22em] text-muted-foreground">
-            — Archimedes
+            Archimedes
           </cite>
         </blockquote>
       </section>
@@ -152,8 +140,8 @@ export default function Page() {
         <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:mt-16 sm:grid-cols-2">
           {LEVERS.map((lever) => (
             <article
-              key={lever.id}
-              className="group relative flex flex-col gap-6 bg-background p-7 transition-colors duration-300 hover:bg-secondary/40 sm:p-9"
+              key={lever.key}
+              className="group relative flex flex-col gap-5 bg-background p-7 transition-colors duration-300 hover:bg-secondary/40 sm:p-9"
             >
               <span className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-lever transition-transform duration-500 ease-out group-hover:scale-x-100" />
               <div className="flex items-center justify-between">
@@ -163,11 +151,16 @@ export default function Page() {
                 <FulcrumGlyph className="text-border transition-colors duration-300 group-hover:text-lever" />
               </div>
 
-              <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                {lever.name}
-              </h3>
+              <div>
+                <h3 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                  {lever.name}
+                </h3>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground/80">
+                  {lever.what}
+                </p>
+              </div>
 
-              <div className="mt-auto space-y-5">
+              <div className="mt-auto space-y-5 pt-2">
                 <p className="text-sm leading-relaxed text-muted-foreground sm:text-[0.95rem]">
                   <span className="label mb-1.5 block text-[0.65rem] text-lever/80">
                     Under-leveraged when
@@ -186,10 +179,38 @@ export default function Page() {
         </div>
       </section>
 
+      {/* ───────────────────── the diagnostic ───────────────────── */}
+      <section
+        id="diagnostic"
+        className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32"
+      >
+        <div className="flex flex-col gap-5">
+          <SectionLabel index="II">The diagnostic</SectionLabel>
+          <h2 className="max-w-2xl text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+            Rate your four levers. Find the one gating the rest.
+          </h2>
+          <p className="max-w-xl text-pretty text-base leading-relaxed text-muted-foreground">
+            The slowest lever governs the whole system. Do not level everything.
+            Diagnose your binding constraint, then pour your effort there.
+          </p>
+        </div>
+
+        <div className="mt-12 sm:mt-16">
+          <Diagnostic />
+        </div>
+
+        <div className="mt-6 flex flex-col gap-2 text-xs leading-relaxed text-muted-foreground/70 sm:flex-row sm:items-center sm:justify-between">
+          <p>Saved to this browser only. Nothing leaves your device.</p>
+          <p className="sm:text-right">
+            Brand, network, and distribution are multipliers, not a fifth lever.
+          </p>
+        </div>
+      </section>
+
       {/* ───────────────────── how it works ───────────────────── */}
       <section id="how" className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32">
         <div className="flex flex-col gap-5">
-          <SectionLabel index="II">How it works</SectionLabel>
+          <SectionLabel index="III">How it works</SectionLabel>
           <h2 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
             Diagnose. Prescribe. Compound.
           </h2>
@@ -214,6 +235,26 @@ export default function Page() {
             </li>
           ))}
         </ol>
+      </section>
+
+      {/* ───────────────────── the clinic / capture ───────────────────── */}
+      <section
+        id="clinic"
+        className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32"
+      >
+        <div className="mx-auto flex max-w-xl flex-col items-center gap-6 text-center">
+          <SectionLabel index="IV">The clinic</SectionLabel>
+          <h2 className="text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+            Get the full diagnosis when the clinic opens.
+          </h2>
+          <p className="text-pretty text-base leading-relaxed text-muted-foreground">
+            We are building the guided version: deeper scoring, your history, and
+            a prescription you can track over time. Be first in line.
+          </p>
+          <div className="mt-2 w-full max-w-md text-left">
+            <EmailCapture />
+          </div>
+        </div>
       </section>
 
       {/* ───────────────────── footer ───────────────────── */}

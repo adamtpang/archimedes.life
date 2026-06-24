@@ -44,7 +44,7 @@ export function EmailCapture() {
         });
         if (!res.ok) throw new Error("Request failed");
       }
-      // No endpoint wired yet — still acknowledge so the experience is complete.
+      // No endpoint wired yet, but still acknowledge so the experience is complete.
       setStatus("done");
     } catch {
       setStatus("error");
@@ -95,7 +95,7 @@ export function EmailCapture() {
         {status === "invalid" ? (
           <span className="text-destructive">Enter a valid email address.</span>
         ) : status === "error" ? (
-          <span className="text-destructive">Something went wrong &mdash; try again.</span>
+          <span className="text-destructive">Something went wrong. Try again.</span>
         ) : (
           <span className="text-muted-foreground/70">
             One lever-sharpening email when we open. No spam, ever.

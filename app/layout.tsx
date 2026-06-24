@@ -13,9 +13,9 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-const title = "archimedes — the leverage diagnosis";
+const title = "archimedes · the leverage diagnosis";
 const description =
-  "You don't have an effort problem. You have a leverage problem. We diagnose the four levers you're under-using — code, media, capital, labor — and prescribe the one move that pulls each.";
+  "You don't have an effort problem. You have a leverage problem. We diagnose the four levers you're under-using (code, media, capital, labor) and prescribe the one move that pulls each.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://archimedes.life"),

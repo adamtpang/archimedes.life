@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 /**
  * The single generated motif for the whole site: a beam balanced on a fulcrum.
  * The long arm (effort) carries a small input; the short arm lifts a large load.
- * The beam slowly works up and down — small effort, enormous load.
+ * The beam slowly works up and down: small effort, enormous load.
  */
 export function LeverMark({ className }: { className?: string }) {
   return (

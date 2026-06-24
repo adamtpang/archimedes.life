@@ -1,10 +1,11 @@
 # archimedes.life
 
-The leverage diagnosis. Find and cure the four levers you're under-using —
-**code, media, capital, labor** — and pull each one.
+The leverage diagnosis. Find and cure the four levers you're under-using:
+**code, media, capital, labor**. Rate yourself on each, find your binding
+constraint, and get the one move to attack it.
 
 > "Give me a lever long enough and a place to stand, and I will move the world."
-> — Archimedes
+> Archimedes
 
 A single static page. Dark, high-contrast, one accent. No database, no auth, no
 API routes.
@@ -24,7 +25,7 @@ npm run dev      # http://localhost:3000
 npm run build    # production build
 ```
 
-## Email capture — TODO before launch
+## Email capture (TODO before launch)
 
 The hero form in [`components/email-capture.tsx`](components/email-capture.tsx)
 validates and acknowledges in the browser but does **not** persist anywhere yet.
