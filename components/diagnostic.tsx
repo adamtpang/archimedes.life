@@ -10,13 +10,14 @@ import {
   LEVER_BY_KEY,
   leverageIndex,
   profile,
+  SCORES_STORAGE_KEY,
   type Lever,
   type Scores,
 } from "@/lib/levers";
 import { FulcrumGlyph } from "@/components/lever-mark";
 import { cn } from "@/lib/utils";
 
-const STORAGE_KEY = "archimedes:scores:v1";
+const STORAGE_KEY = SCORES_STORAGE_KEY;
 const DEFAULTS: Scores = { code: 50, media: 25, capital: 30, labor: 35 };
 const SAMPLE: Scores = { code: 85, media: 5, capital: 10, labor: 5 };
 

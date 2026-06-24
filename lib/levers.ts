@@ -206,3 +206,35 @@ If you are running in Claude Code with file access, scaffold a "leverage-plan" f
 
 About me (I will fill this in): [your situation, skills, audience, current projects, and constraints].`;
 }
+
+/** localStorage key the diagnostic and the chat both read scores from. */
+export const SCORES_STORAGE_KEY = "archimedes:scores:v1";
+
+export function isScores(value: unknown): value is Scores {
+  if (!value || typeof value !== "object") return false;
+  const s = value as Record<string, unknown>;
+  return (["code", "media", "capital", "labor"] as const).every(
+    (key) => typeof s[key] === "number"
+  );
+}
+
+/** System prompt for the Archimedes chat agent, grounded in the person's diagnosis. */
+export function buildSystemPrompt(scores: Scores | null): string {
+  const base = `You are Archimedes, a sharp and warm leverage coach. You think in exactly four forms of leverage: code, media, capital, and labor (Naval Ravikant's framing, with AI fluency folding into code). The slowest lever gates the whole system, so you push the person's binding constraint rather than spreading effort across all four.
+
+Coaching style: concrete and named, never abstract. Prescribe the next real action, not a framework or a course. Keep replies short, a few sentences or a tight list. Ask at most one sharp question, and only when the answer would change your advice. Do not use em dashes or en dashes in your writing.`;
+
+  if (!scores) {
+    return `${base}
+
+You do not have their lever scores yet. Invite them to run the diagnostic on the page, then coach from what they tell you.`;
+  }
+
+  const lever = LEVER_BY_KEY[bindingConstraint(scores)];
+  const prof = profile(scores);
+  const index = leverageIndex(scores);
+
+  return `${base}
+
+Their current diagnosis (0 to 100 each): Code ${scores.code}, Media ${scores.media}, Capital ${scores.capital}, Labor ${scores.labor}. Profile: ${prof.label}. Leverage index: ${index} out of 100. Their binding constraint is ${lever.name}: ${lever.constraintRx} Bias every answer toward raising ${lever.name} unless they steer you elsewhere.`;
+}

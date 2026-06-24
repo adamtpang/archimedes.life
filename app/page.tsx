@@ -1,5 +1,6 @@
 import { ArrowDown } from "lucide-react";
 
+import { ArchimedesChat } from "@/components/archimedes-chat";
 import { Diagnostic } from "@/components/diagnostic";
 import { EmailCapture } from "@/components/email-capture";
 import { FulcrumGlyph, LeverMark } from "@/components/lever-mark";
@@ -207,10 +208,28 @@ export default function Page() {
         </div>
       </section>
 
+      {/* ───────────────────── talk to archimedes ───────────────────── */}
+      <section id="chat" className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32">
+        <div className="flex flex-col gap-5">
+          <SectionLabel index="III">Talk to Archimedes</SectionLabel>
+          <h2 className="max-w-2xl text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+            Coach the constraint in real time.
+          </h2>
+          <p className="max-w-xl text-pretty text-base leading-relaxed text-muted-foreground">
+            Archimedes reads your current scores and helps you attack your
+            binding constraint. Ask for a plan, a first step, or a gut check.
+          </p>
+        </div>
+
+        <div className="mt-12 sm:mt-16">
+          <ArchimedesChat />
+        </div>
+      </section>
+
       {/* ───────────────────── how it works ───────────────────── */}
       <section id="how" className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32">
         <div className="flex flex-col gap-5">
-          <SectionLabel index="III">How it works</SectionLabel>
+          <SectionLabel index="IV">How it works</SectionLabel>
           <h2 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
             Diagnose. Prescribe. Compound.
           </h2>
@@ -243,7 +262,7 @@ export default function Page() {
         className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32"
       >
         <div className="mx-auto flex max-w-xl flex-col items-center gap-6 text-center">
-          <SectionLabel index="IV">The clinic</SectionLabel>
+          <SectionLabel index="V">The clinic</SectionLabel>
           <h2 className="text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
             Get the full diagnosis when the clinic opens.
           </h2>
