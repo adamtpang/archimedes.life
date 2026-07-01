@@ -1,35 +1,44 @@
 import { ArrowDown } from "lucide-react";
 
 import { ArchimedesChat } from "@/components/archimedes-chat";
+import { CureProtocol } from "@/components/cure-protocol";
 import { Diagnostic } from "@/components/diagnostic";
 import { EmailCapture } from "@/components/email-capture";
+import { LeverageProvider } from "@/components/leverage-store";
+import { LeverageTracker } from "@/components/leverage-tracker";
 import { FulcrumGlyph, LeverMark } from "@/components/lever-mark";
 import { Button } from "@/components/ui/button";
 import { LEVERS } from "@/lib/levers";
 
-type Step = {
-  id: string;
-  name: string;
-  body: string;
-};
-
-const STEPS: Step[] = [
+const ARC = [
   {
-    id: "01",
-    name: "Diagnose",
-    body: "Rate your four levers and surface the one gating the rest. You just did this above.",
+    step: "01",
+    title: "Diagnose",
+    body: "Rate your four levers and surface the one gating the rest. You leave with a leverage index, a profile, and the single binding constraint named.",
   },
   {
-    id: "02",
-    name: "Prescribe",
-    body: "Get one concrete move for your binding constraint. Not a framework. Not a course. The next action, named.",
+    step: "02",
+    title: "Cure",
+    body: "Get the cure protocol for that constraint: the strategic read plus a sequenced set of concrete moves, the first one doable in the next hour. A prescription you run, not advice you nod at.",
   },
   {
-    id: "03",
-    name: "Compound",
-    body: "Pull the weak lever. Re-measure. Repeat until small inputs move loads that used to be out of the question.",
+    step: "03",
+    title: "Compound",
+    body: "Work the plays, re-measure, and watch your leverage index climb. Small inputs start moving loads that used to be out of the question.",
   },
 ];
+
+const CURE_SECTION = {
+  label: "The cure",
+  title: "Every lever has a protocol, and the clinic hands you the one for your constraint.",
+  body: "Code, media, capital, and labor each come with a cure protocol: the strategic read on why that lever is stuck, then the ranked moves that pull it, most actionable first. No frameworks, no course. The next real action for the exact lever holding you back.",
+};
+
+const MAXX_SECTION = {
+  label: "Leverage-maxxing",
+  title: "One diagnosis is a snapshot. The tracker turns it into a slope.",
+  body: "The tracker keeps a history of your scores, so every re-measure lands next to the last one and you see the line move. Run the protocols, log the reps, and watch your leverage index (the geometric mean of all four levers) climb until the whole system compounds.",
+};
 
 function SectionLabel({
   index,
@@ -66,7 +75,7 @@ export default function Page() {
           style={{ animationDelay: "0ms" }}
         >
           <FulcrumGlyph className="text-lever" />
-          Leverage diagnosis
+          The leverage clinic
         </p>
 
         <h1
@@ -88,18 +97,16 @@ export default function Page() {
           className="reveal mt-5 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg"
           style={{ animationDelay: "250ms" }}
         >
-          We find the four levers you&rsquo;re under-using: code, media, capital,
-          labor. Then we prescribe the one move that pulls each.
+          Diagnose the four levers you&rsquo;re under-using (code, media, capital,
+          labor), get the cure for the one holding you back, and compound it until
+          the whole system moves.
         </p>
 
         <div
           className="reveal mt-10 flex flex-wrap items-center gap-3"
           style={{ animationDelay: "330ms" }}
         >
-          <Button
-            asChild
-            className="h-12 gap-2 px-6 text-base font-semibold"
-          >
+          <Button asChild className="h-12 gap-2 px-6 text-base font-semibold">
             <a href="#diagnostic">
               Run your diagnosis
               <ArrowDown className="h-4 w-4" />
@@ -180,74 +187,19 @@ export default function Page() {
         </div>
       </section>
 
-      {/* ───────────────────── the diagnostic ───────────────────── */}
-      <section
-        id="diagnostic"
-        className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32"
-      >
-        <div className="flex flex-col gap-5">
-          <SectionLabel index="II">The diagnostic</SectionLabel>
-          <h2 className="max-w-2xl text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-            Rate your four levers. Find the one gating the rest.
-          </h2>
-          <p className="max-w-xl text-pretty text-base leading-relaxed text-muted-foreground">
-            The slowest lever governs the whole system. Do not level everything.
-            Diagnose your binding constraint, then pour your effort there.
-          </p>
-        </div>
-
-        <div className="mt-12 sm:mt-16">
-          <Diagnostic />
-        </div>
-
-        <div className="mt-6 flex flex-col gap-2 text-xs leading-relaxed text-muted-foreground/70 sm:flex-row sm:items-center sm:justify-between">
-          <p>Saved to this browser only. Nothing leaves your device.</p>
-          <p className="sm:text-right">
-            Brand, network, and distribution are multipliers, not a fifth lever.
-          </p>
-        </div>
-      </section>
-
-      {/* ───────────────────── talk to archimedes ───────────────────── */}
-      <section id="chat" className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32">
-        <div className="flex flex-col gap-5">
-          <SectionLabel index="III">Talk to Archimedes</SectionLabel>
-          <h2 className="max-w-2xl text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-            Coach the constraint in real time.
-          </h2>
-          <p className="max-w-xl text-pretty text-base leading-relaxed text-muted-foreground">
-            Archimedes reads your current scores and helps you attack your
-            binding constraint. Ask for a plan, a first step, or a gut check.
-          </p>
-        </div>
-
-        <div className="mt-12 sm:mt-16">
-          <ArchimedesChat />
-        </div>
-      </section>
-
-      {/* ───────────────────── how it works ───────────────────── */}
-      <section id="how" className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32">
-        <div className="flex flex-col gap-5">
-          <SectionLabel index="IV">How it works</SectionLabel>
-          <h2 className="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-            Diagnose. Prescribe. Compound.
-          </h2>
-        </div>
-
-        <ol className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:mt-16 sm:grid-cols-3">
-          {STEPS.map((step) => (
-            <li
-              key={step.id}
-              className="flex flex-col gap-5 bg-background p-7 sm:p-9"
-            >
+      {/* ───────────────────── the loop ───────────────────── */}
+      <section className="mx-auto max-w-5xl px-6 py-8 sm:px-8">
+        <ol className="grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-3">
+          {ARC.map((step) => (
+            <li key={step.step} className="flex flex-col gap-4 bg-background p-7 sm:p-9">
               <div className="flex items-baseline gap-3">
                 <span className="font-mono text-3xl font-semibold text-lever">
-                  {step.id}
+                  {step.step}
                 </span>
-                <span className="h-px flex-1 bg-border" />
+                <span className="text-lg font-semibold tracking-tight">
+                  {step.title}
+                </span>
               </div>
-              <h3 className="text-xl font-semibold tracking-tight">{step.name}</h3>
               <p className="text-sm leading-relaxed text-muted-foreground">
                 {step.body}
               </p>
@@ -256,19 +208,107 @@ export default function Page() {
         </ol>
       </section>
 
+      {/* Diagnose, Cure, Compound share one leverage store */}
+      <LeverageProvider>
+        {/* ───────────────────── II · diagnose ───────────────────── */}
+        <section
+          id="diagnostic"
+          className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32"
+        >
+          <div className="flex flex-col gap-5">
+            <SectionLabel index="II">Diagnose</SectionLabel>
+            <h2 className="max-w-2xl text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+              Rate your four levers. Find the one gating the rest.
+            </h2>
+            <p className="max-w-xl text-pretty text-base leading-relaxed text-muted-foreground">
+              The slowest lever governs the whole system. Do not level everything.
+              Diagnose your binding constraint, then pour your effort there.
+            </p>
+          </div>
+
+          <div className="mt-12 sm:mt-16">
+            <Diagnostic />
+          </div>
+
+          <p className="mt-6 text-xs leading-relaxed text-muted-foreground/70">
+            Brand, network, and distribution are multipliers, not a fifth lever.
+            They lower the cost of pulling all four.
+          </p>
+        </section>
+
+        {/* ───────────────────── III · cure ───────────────────── */}
+        <section
+          id="cure"
+          className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32"
+        >
+          <div className="flex flex-col gap-5">
+            <SectionLabel index="III">{CURE_SECTION.label}</SectionLabel>
+            <h2 className="max-w-3xl text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+              {CURE_SECTION.title}
+            </h2>
+            <p className="max-w-xl text-pretty text-base leading-relaxed text-muted-foreground">
+              {CURE_SECTION.body}
+            </p>
+          </div>
+
+          <div className="mt-12 sm:mt-16">
+            <CureProtocol />
+          </div>
+        </section>
+
+        {/* ───────────────────── IV · compound ───────────────────── */}
+        <section
+          id="compound"
+          className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32"
+        >
+          <div className="flex flex-col gap-5">
+            <SectionLabel index="IV">{MAXX_SECTION.label}</SectionLabel>
+            <h2 className="max-w-3xl text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+              {MAXX_SECTION.title}
+            </h2>
+            <p className="max-w-xl text-pretty text-base leading-relaxed text-muted-foreground">
+              {MAXX_SECTION.body}
+            </p>
+          </div>
+
+          <div className="mt-12 sm:mt-16">
+            <LeverageTracker />
+          </div>
+        </section>
+      </LeverageProvider>
+
+      {/* ───────────────────── V · talk to archimedes ───────────────────── */}
+      <section id="chat" className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32">
+        <div className="flex flex-col gap-5">
+          <SectionLabel index="V">Talk to Archimedes</SectionLabel>
+          <h2 className="max-w-2xl text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+            Coach the constraint in real time.
+          </h2>
+          <p className="max-w-xl text-pretty text-base leading-relaxed text-muted-foreground">
+            Archimedes reads your current scores and helps you attack your binding
+            constraint. Ask for a plan, a first step, or a gut check.
+          </p>
+        </div>
+
+        <div className="mt-12 sm:mt-16">
+          <ArchimedesChat />
+        </div>
+      </section>
+
       {/* ───────────────────── the clinic / capture ───────────────────── */}
       <section
         id="clinic"
         className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32"
       >
         <div className="mx-auto flex max-w-xl flex-col items-center gap-6 text-center">
-          <SectionLabel index="V">The clinic</SectionLabel>
+          <SectionLabel index="VI">The clinic</SectionLabel>
           <h2 className="text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-            Get the full diagnosis when the clinic opens.
+            The guided clinic opens soon.
           </h2>
           <p className="text-pretty text-base leading-relaxed text-muted-foreground">
-            We are building the guided version: deeper scoring, your history, and
-            a prescription you can track over time. Be first in line.
+            You have the diagnosis, the cures, and the tracker. The guided clinic
+            adds saved history across your devices, accountability, and a coach
+            that checks in. Be first in line.
           </p>
           <div className="mt-2 w-full max-w-md text-left">
             <EmailCapture />

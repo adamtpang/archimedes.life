@@ -4,64 +4,25 @@ import * as React from "react";
 import { Check, Copy } from "lucide-react";
 
 import {
-  bindingConstraint,
   buildClaudePrompt,
   LEVERS,
   LEVER_BY_KEY,
-  leverageIndex,
   profile,
-  SCORES_STORAGE_KEY,
   type Lever,
   type Scores,
 } from "@/lib/levers";
+import { useLeverage } from "@/components/leverage-store";
 import { FulcrumGlyph } from "@/components/lever-mark";
 import { cn } from "@/lib/utils";
 
-const STORAGE_KEY = SCORES_STORAGE_KEY;
 const DEFAULTS: Scores = { code: 50, media: 25, capital: 30, labor: 35 };
 const SAMPLE: Scores = { code: 85, media: 5, capital: 10, labor: 5 };
 
-function clamp(value: unknown): number {
-  const n = Math.round(Number(value));
-  if (Number.isNaN(n)) return 0;
-  return Math.max(0, Math.min(100, n));
-}
-
 export function Diagnostic() {
-  const [scores, setScores] = React.useState<Scores>(DEFAULTS);
-  const [loaded, setLoaded] = React.useState(false);
+  const { scores, setScore, setScores, constraint, index } = useLeverage();
   const [copied, setCopied] = React.useState(false);
 
-  React.useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as Partial<Scores>;
-        setScores({
-          code: clamp(parsed.code ?? DEFAULTS.code),
-          media: clamp(parsed.media ?? DEFAULTS.media),
-          capital: clamp(parsed.capital ?? DEFAULTS.capital),
-          labor: clamp(parsed.labor ?? DEFAULTS.labor),
-        });
-      }
-    } catch {
-      /* ignore malformed storage */
-    }
-    setLoaded(true);
-  }, []);
-
-  React.useEffect(() => {
-    if (!loaded) return;
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(scores));
-    } catch {
-      /* storage unavailable */
-    }
-  }, [scores, loaded]);
-
-  const constraint = bindingConstraint(scores);
   const constraintLever = LEVER_BY_KEY[constraint];
-  const index = leverageIndex(scores);
   const prof = profile(scores);
   const prompt = React.useMemo(() => buildClaudePrompt(scores), [scores]);
 
@@ -108,9 +69,7 @@ export function Diagnostic() {
               lever={lever}
               value={scores[lever.key]}
               isConstraint={constraint === lever.key}
-              onChange={(value) =>
-                setScores((prev) => ({ ...prev, [lever.key]: value }))
-              }
+              onChange={(value) => setScore(lever.key, value)}
             />
           ))}
         </div>

@@ -1,0 +1,194 @@
+{
+  "code": {
+    "name": "Code",
+    "thesis": "Curing Code means the boring tasks you retype every week now run on a trigger you did not pull, and at least one of them earns money while you sleep.",
+    "firstMove": "Set a 25-minute timer. Open a new folder, run `claude` (or Cursor) in it, and type: \"Write a script that does [the exact boring thing I did by hand in the last 48 hours: rename these files, pull this report, send this status update].\" Run it once against real data, confirm the output is correct, then `git init` and commit it. One script, one real task, committed before the timer's second ring.",
+    "leadingIndicator": "Manual minutes eliminated per week, tracked in one spreadsheet row: sum of (times each shipped automation fires per week x minutes it used to cost you by hand). Week-one target: 60. Day-90 target: 300 (5 hours of your week now on autopilot). If the number did not move this week, you shipped nothing that counts.",
+    "plays": [
+      {
+        "horizon": "This week",
+        "action": "Keep a plain-text \"did this by hand\" log for 3 days. Every recurring task, log the task name, its trigger, and minutes it cost. On day 3, take the row with the highest weekly minutes and automate exactly that one with Claude Code.",
+        "proof": "A 3-column log with 5+ entries, and one script committed to a repo that handles the top-minutes row, with its saved-minutes figure written next to it."
+      },
+      {
+        "horizon": "This week",
+        "action": "Put that script on a trigger so you never launch it by hand again: a GitHub Action on a `schedule:` cron, a Vercel cron, or an n8n webhook. Add one line that pings you (email or Slack) when it fires.",
+        "proof": "A green run in the Action/scheduler history with a timestamp you did not trigger, plus the confirmation ping sitting in your inbox."
+      },
+      {
+        "horizon": "30 days",
+        "action": "Get to 5 triggered automations total, one every 4 to 5 days, all committed under a single repo named `automations` so they compound in one place instead of scattering across laptops and folders.",
+        "proof": "5 scripts in the `automations` repo, each on its own trigger, and the tracker reading 180+ manual minutes per week eliminated."
+      },
+      {
+        "horizon": "30 days",
+        "action": "Take your single most-repeated workflow and wrap it as a tool a stranger can run: a CLI with one flag (`--input`) or a form that posts to the script. Write a README with a copy-paste run command and one example.",
+        "proof": "One person who is not you runs it start to finish from the README alone, and you did not touch their keyboard or answer a single question."
+      },
+      {
+        "horizon": "60 days",
+        "action": "Give your most-used internal tool a URL. Deploy it to Vercel or a Cloudflare Worker behind a single text box, so it is a link you paste, not a file on one machine.",
+        "proof": "A live https URL you drop into a chat, and a stranger gets the correct output on their first try with zero explanation from you."
+      },
+      {
+        "horizon": "60 days",
+        "action": "Add a hit counter or logging to each deployed tool so it reports runs-per-week on its own. Pipe that number into the same tracker row as your leading indicator.",
+        "proof": "A weekly runs-per-tool number that lands in your tracker or inbox without you running a single query by hand."
+      },
+      {
+        "horizon": "90 days",
+        "action": "Put a Stripe payment link or a login wall (Clerk, Auth) on the tool with the most weekly runs. Charge one real dollar amount, even $5/month, and share the link with 10 people who already asked for it.",
+        "proof": "1 paying external user (a real charge in your Stripe dashboard) or 3 recurring logged-in external users, turning code you wrote once into your first drop of Capital."
+      }
+    ],
+    "failureModes": [
+      "You architect instead of ship. A week vanishes into picking the framework, the database, and the perfect repo layout, and nothing runs yet. Counter: ban every decision that is not \"does this kill the manual task, yes or no.\" One ugly script on a cron beats a clean one that does not exist. Ship today, refactor only when it breaks.",
+      "You automate the fun task, not the binding one. You build the interesting thing to code while the annoying time-sink you actually dread stays manual. Counter: automate strictly top-down by minutes-lost-per-week. If it is not the highest number on your \"did this by hand\" log, you do not get to build it yet.",
+      "You build it and keep babysitting it, so it is a script you still launch by hand, not automation. Counter: it is not shipped until it runs on a trigger you did not pull. If you are still typing a command to start it each week, add the cron or the Action before you call it done."
+    ]
+  },
+  "media": {
+    "name": "Media",
+    "thesis": "Curing Media means one piece of thinking you did once keeps recruiting strangers, subscribers, and buyers for months while you sleep, instead of dying in the room you said it in.",
+    "firstMove": "Open your phone's sent folder (Slack, iMessage, WhatsApp, or email) and find the single sharpest thing you told one person this week. Paste it verbatim into a new post on the one platform where your audience already scrolls (X, LinkedIn, or a Substack note). Add nothing. Do not turn it into an essay. Hit publish, then paste the live URL and timestamp into a spreadsheet named \"Media log\". You have 60 minutes and this takes 12. Media is off zero today.",
+    "leadingIndicator": "Net-new email subscribers per week, tracked as an integer in a spreadsheet with a date column so you watch the slope, not the total. Target 10 per week to start. Followers and likes are rented and cannot be re-contacted; an email address is the only Media asset you own and can hit again for free. If a post did not move this number, it did not do Media work.",
+    "plays": [
+      {
+        "horizon": "This week",
+        "action": "Stand up the owned list before anything else. Create a Beehiiv or Substack account (free tier), publish a one-sentence welcome post, and drop the signup URL into your platform bio, every post footer, and your email signature. This is the only piece of infrastructure an algorithm cannot throttle.",
+        "proof": "A live signup URL that has captured at least 1 real subscriber (enter your own address to confirm the confirmation email fires)."
+      },
+      {
+        "horizon": "This week",
+        "action": "Lock a survivable cadence: 3 posts per week, same days and time (Mon/Wed/Fri 9am), created as recurring calendar events. Batch-write all three Sunday from your sent-messages and voice-memo backlog, not from a blank page.",
+        "proof": "3 posts live this week with URLs and timestamps in the Media log, plus 3 recurring calendar events visible for next week."
+      },
+      {
+        "horizon": "30 days",
+        "action": "Ship the flagship you have been gating: the one long piece (essay, teardown, or 8-minute Loom) that holds your best thinking. Put the email CTA in the first 3 lines and again at the end. Pin it to your profile.",
+        "proof": "One flagship URL is live, pinned, and shows at least 25 signups attributed to it (use a UTM link or Beehiiv's per-post referral count)."
+      },
+      {
+        "horizon": "30 days",
+        "action": "Run the repurpose loop so cadence never eats new thinking. Slice each flagship into 5 atomic posts (one claim per post), load them into Typefully or Buffer, and schedule across the next 2 weeks.",
+        "proof": "10 or more posts sit scheduled in Typefully/Buffer, each traceable to a source flagship, with visible publish dates."
+      },
+      {
+        "horizon": "60 days",
+        "action": "Convert the list from broadcast to relationship. Send one email every week: one idea, under 200 words, ending in a question readers can reply to. Reply personally to every response for 60 days straight.",
+        "proof": "8 consecutive weekly emails sent (visible in your ESP's sent archive) with a quotable reply rate, target 3% or higher."
+      },
+      {
+        "horizon": "60 days",
+        "action": "Borrow someone else's audience once. Book one guest slot pointing back to your signup link: a podcast appearance, a newsletter cross-promo swap, or a written guest post on a bigger account's channel. Pitch 5 targets to land 1.",
+        "proof": "1 external placement live with a UTM-tagged link and at least 15 referred signups counted in your spreadsheet."
+      },
+      {
+        "horizon": "90 days",
+        "action": "Double down on the proven vein and cut the rest. Sort your posts by subscribers-driven, name the top 3, extract the shared format and topic, and commit the next 30 days of cadence to that pattern only.",
+        "proof": "A one-page teardown naming your top 3 posts by signups, the pattern they share, and next month's calendar built exclusively on that pattern."
+      }
+    ],
+    "failureModes": [
+      "Perfectionism disguised as craft: you polish the essay for three weeks and Media stays at zero. Counter: enforce a ship rule. Any draft that is 80% done and 48 hours old publishes as-is. You cannot edit a post nobody has read.",
+      "Building on rented land: all your reach lives in a follower graph an algorithm can throttle overnight. Counter: judge every post by subscribers gained, never likes, and funnel every piece to the owned email list so borrowed attention converts into an audience you keep.",
+      "Vanishing after publish: you post, refresh for likes, get none, and quit before compounding starts. Counter: commit to shipping 24 pieces before you judge results at all, and review only the weekly subscriber slope, never a single post's performance."
+    ]
+  },
+  "capital": {
+    "name": "Capital",
+    "thesis": "Curing Capital means every idle dollar you own is clocked into a second job that pays you while you sleep, so your income no longer flatlines the second you stop working.",
+    "firstMove": "Open your bank app right now, read the exact checking balance, subtract one month of expenses, and same-day transfer everything above that into Fidelity SPAXX, Vanguard VMFXX, or a Treasury Direct 4-week bill paying 4 to 5 percent. Screenshot the confirmation before you close the app.",
+    "leadingIndicator": "The dollar amount of income that landed this month without you doing new work that month: interest, dividends, MRR, royalties, distributions. Log the single number in a note every Friday. This week's win is moving it off exactly 0 dollars.",
+    "plays": [
+      {
+        "horizon": "This week",
+        "action": "Sweep all cash above a one-month buffer into SPAXX, VMFXX, or a 4-week T-bill at 4 to 5 percent, then set a recurring monthly auto-invest of a fixed dollar amount into VTI or VT.",
+        "proof": "Two screenshots: the sweep confirmation with the dollar amount, and the scheduled recurring auto-invest showing the monthly figure and next run date."
+      },
+      {
+        "horizon": "This week",
+        "action": "On your next paid engagement, send one written email converting 15 percent of your cash rate into equity, a revenue share, or a SAFE with a named valuation cap and discount.",
+        "proof": "The sent email in your outbox naming the exact percent, cap, and discount, plus the reply thread."
+      },
+      {
+        "horizon": "30 days",
+        "action": "Turn one existing service, template, or tool into a recurring Stripe or Gumroad subscription priced per month, and close 3 paying subscribers by DMing 20 past clients.",
+        "proof": "A live Stripe dashboard showing 3 active subscriptions and a non-zero MRR figure."
+      },
+      {
+        "horizon": "30 days",
+        "action": "Raise the price of your highest-margin offer by 20 percent for every new client starting today, and standing-order the full 20 percent delta straight into VTI on receipt.",
+        "proof": "The updated pricing page or proposal at the new number, plus a transfer receipt moving the first delta into the index fund."
+      },
+      {
+        "horizon": "60 days",
+        "action": "Push MRR past 1,000 dollars: add an annual plan at 2 months free and email every free and lapsed user one upgrade offer with a 7-day deadline.",
+        "proof": "The Stripe MRR line reading 1,000 dollars or more, with at least one annual prepay booked."
+      },
+      {
+        "horizon": "60 days",
+        "action": "Deploy your first accumulated tranche into one ownership position: a dividend or index buy, a 1,000 to 5,000 dollar angel check, or a cash-flowing micro-asset (newsletter or micro-SaaS) listed on Acquire.com or Flippa.",
+        "proof": "A trade confirmation or signed purchase agreement stating the dollar amount and the expected annual yield."
+      },
+      {
+        "horizon": "90 days",
+        "action": "Reach the point where recurring plus passive income fully covers one named fixed monthly bill (your software stack, rent, or subscriptions), then switch on auto-reinvest for every dollar above that bill.",
+        "proof": "One month's statement showing that bill paid entirely from portfolio or MRR income, plus a screenshot of the auto-reinvest rule turned on."
+      }
+    ],
+    "failureModes": [
+      "Hoarding cash as safety: you leave 6-plus months idle in checking because it feels safe while inflation eats 3 to 4 percent a year. Counter: fix your buffer at one month in exact dollars and treat every dollar above it as unemployed capital you must deploy this week.",
+      "Taking equity you never model: you grab a small slice, feel leveraged, and never check if it is worth a cent. Counter: only accept ownership you can price. Write down the company's revenue or last valuation and your percent, so it is a position with a number, not a feeling.",
+      "Confusing revenue with capital: you scale a service business, more hours in for more cash out, and call it capital leverage. Counter: it counts only when a dollar earns without your hours. Every Friday, push up the percent of income that arrived while you did no new work, not gross revenue."
+    ]
+  },
+  "labor": {
+    "name": "Labor",
+    "thesis": "Curing Labor means the work you are best at keeps shipping while you sleep, because a named person owns it end to end and you only inspect a summary.",
+    "firstMove": "Open a doc titled \"Delegation Kill List.\" Write the 5 recurring tasks you did this week that only you know how to do, and next to each write the hours per week it eats. Bold the one row with the highest hours that you also dread. That row is your first hire's one-line job description. Paste it into a draft Upwork or OnlineJobs.ph job title field before you close the tab.",
+    "leadingIndicator": "Hours per week of recurring work a named person now owns end to end (they ship it, you never touch the raw work). Count it every Friday in the same doc. Zero this week is honest. The number climbing week over week is the only proof Labor is moving.",
+    "plays": [
+      {
+        "horizon": "This week",
+        "action": "Run a 3-day time audit in a single notes file: log every 30-minute block and tag it $10/hr, $100/hr, or $1000/hr. Sum the hours in the $10 and $100 buckets. That sum is your weekly delegation budget in hours.",
+        "proof": "A tagged log covering 3 days and one number written at the top: total hours per week spent on sub-$100/hr work."
+      },
+      {
+        "horizon": "This week",
+        "action": "Take the bolded Kill List task and record yourself doing it once end to end with Loom, narrating every click and every decision. Do not write a doc first. Record the real task on real data.",
+        "proof": "One Loom URL, 10 to 30 minutes, showing the task from start to definition-of-done."
+      },
+      {
+        "horizon": "30 days",
+        "action": "Turn the Loom into a one-page SOP (numbered steps, the 3 decisions that trip people up, a definition-of-done checklist) and post one role scoped to exactly that task on Upwork or OnlineJobs.ph. Cap weekly hours at the sub-$100/hr number from your audit.",
+        "proof": "A live public job post with a fixed weekly hour cap and the SOP linked, plus 5 or more applicants in the pipeline."
+      },
+      {
+        "horizon": "30 days",
+        "action": "Hire one person on a paid 2-week trial for that single task. Hand them the Loom, the SOP, and one real batch. Do not hire two and do not hire a generalist.",
+        "proof": "One contractor invoiced and paid for their first completed batch, graded pass against your definition-of-done checklist."
+      },
+      {
+        "horizon": "60 days",
+        "action": "Switch the task to async review-only: they deliver into a shared folder and post a 5-line summary, you review the summary not the raw work. Put a recurring 15-minute Friday check-in on the calendar and kill all ad hoc pings.",
+        "proof": "A recurring 15-minute calendar hold plus one week logged where you touched the raw task zero times and it still shipped."
+      },
+      {
+        "horizon": "60 days",
+        "action": "Run the record-SOP-hire loop on the second Kill List row, and have your first hire write or edit that SOP so documentation stops routing through you.",
+        "proof": "A second SOP authored or edited by your first hire, and a second named owner running a task you no longer touch."
+      },
+      {
+        "horizon": "90 days",
+        "action": "Promote your most reliable hire from a task list to one outcome metric (tickets cleared per week, posts shipped per week, or leads booked per week). Give them a written spending cap (for example, spend up to $200 without asking) and let them choose the how.",
+        "proof": "One person owning a named weekly metric with a written dollar cap, and one logged week where a call got made and money got spent without you in the loop."
+      }
+    ],
+    "failureModes": [
+      "Perfectionist bottleneck: \"nobody does it as well as me,\" so you redo their work and prove yourself right. Counter: write the definition-of-done checklist before they start and grade only against the checklist, not against how you would have done it. 80 percent by someone else beats 100 percent by you that never scales.",
+      "Documenting into the void: you make Looms and SOPs that sit in a folder because you never post the job. Counter: reverse the order. Post the job with a start date first, then let the deadline force the doc. A hire on the calendar is what turns a document into delegation.",
+      "Delegating tasks but hoarding decisions: they do the work but ping you for every judgment call, so you are still the bottleneck, just slower. Counter: hand over one decision with a written rule and a dollar cap (\"refund anything under $50 without asking\"). Owning decisions, not tasks, is what frees your calendar."
+    ]
+  }
+}

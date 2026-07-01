@@ -1,3 +1,5 @@
+import curesJson from "./cures.json";
+
 export type LeverKey = "code" | "media" | "capital" | "labor";
 
 export interface Lever {
@@ -237,4 +239,64 @@ You do not have their lever scores yet. Invite them to run the diagnostic on the
   return `${base}
 
 Their current diagnosis (0 to 100 each): Code ${scores.code}, Media ${scores.media}, Capital ${scores.capital}, Labor ${scores.labor}. Profile: ${prof.label}. Leverage index: ${index} out of 100. Their binding constraint is ${lever.name}: ${lever.constraintRx} Bias every answer toward raising ${lever.name} unless they steer you elsewhere.`;
+}
+
+// ─────────────────────────── the cures ───────────────────────────
+
+export const HORIZONS = ["This week", "30 days", "60 days", "90 days"] as const;
+export type Horizon = (typeof HORIZONS)[number];
+
+export interface CurePlay {
+  horizon: Horizon;
+  action: string;
+  proof: string;
+}
+
+export interface CureProtocol {
+  name: string;
+  thesis: string;
+  firstMove: string;
+  leadingIndicator: string;
+  plays: CurePlay[];
+  failureModes: string[];
+}
+
+export const CURES = curesJson as unknown as Record<LeverKey, CureProtocol>;
+
+export function playId(leverKey: LeverKey, index: number): string {
+  return `${leverKey}:${index}`;
+}
+
+export interface NextPlay extends CurePlay {
+  id: string;
+  leverKey: LeverKey;
+  leverName: string;
+  index: number;
+}
+
+/** The single next play to work: the earliest-horizon uncompleted play of the binding constraint. */
+export function nextPlay(scores: Scores, completed: Set<string>): NextPlay | null {
+  const leverKey = bindingConstraint(scores);
+  const cure = CURES[leverKey];
+  const ranked = cure.plays
+    .map((play, index) => ({
+      ...play,
+      id: playId(leverKey, index),
+      leverKey,
+      leverName: cure.name,
+      index,
+    }))
+    .sort((a, b) => HORIZONS.indexOf(a.horizon) - HORIZONS.indexOf(b.horizon));
+  return ranked.find((play) => !completed.has(play.id)) ?? null;
+}
+
+// ─────────────────────── the maxxing tracker ───────────────────────
+
+export const COMPLETED_PLAYS_KEY = "archimedes:plays:v1";
+export const HISTORY_KEY = "archimedes:history:v1";
+
+export interface Snapshot {
+  t: number;
+  scores: Scores;
+  index: number;
 }
