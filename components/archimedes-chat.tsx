@@ -18,6 +18,8 @@ const STARTERS = [
   "How do I move media off zero?",
 ];
 
+const BYOK_STORAGE_KEY = "archimedes:byok:v1";
+
 function readScores(): unknown {
   try {
     const raw = localStorage.getItem(SCORES_STORAGE_KEY);
@@ -32,7 +34,44 @@ export function ArchimedesChat() {
   const [input, setInput] = React.useState("");
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [byokKey, setByokKey] = React.useState<string | null>(null);
+  const [needsKey, setNeedsKey] = React.useState(false);
+  const [keyDraft, setKeyDraft] = React.useState("");
   const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    try {
+      setByokKey(localStorage.getItem(BYOK_STORAGE_KEY));
+    } catch {
+      /* storage unavailable */
+    }
+  }, []);
+
+  function saveKey() {
+    const trimmed = keyDraft.trim();
+    if (!/^sk-ant-[\w-]{10,}$/.test(trimmed)) {
+      setError("That does not look like an Anthropic API key (sk-ant-...).");
+      return;
+    }
+    try {
+      localStorage.setItem(BYOK_STORAGE_KEY, trimmed);
+    } catch {
+      /* storage unavailable; key still works for this session */
+    }
+    setByokKey(trimmed);
+    setKeyDraft("");
+    setNeedsKey(false);
+    setError(null);
+  }
+
+  function forgetKey() {
+    try {
+      localStorage.removeItem(BYOK_STORAGE_KEY);
+    } catch {
+      /* storage unavailable */
+    }
+    setByokKey(null);
+  }
 
   React.useEffect(() => {
     const node = scrollRef.current;
@@ -53,10 +92,15 @@ export function ArchimedesChat() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: history, scores: readScores() }),
+        body: JSON.stringify({
+          messages: history,
+          scores: readScores(),
+          apiKey: byokKey || undefined,
+        }),
       });
 
       if (!res.ok || !res.body) {
+        if (res.status === 503) setNeedsKey(true);
         const data = (await res.json().catch(() => ({}))) as { error?: string };
         throw new Error(data.error || "Archimedes is unavailable right now.");
       }
@@ -170,6 +214,46 @@ export function ArchimedesChat() {
       {error && (
         <p className="border-t border-border px-5 py-2.5 text-xs text-destructive">
           {error}
+        </p>
+      )}
+
+      {needsKey && !byokKey && (
+        <div className="flex flex-col gap-2 border-t border-border px-5 py-3.5">
+          <div className="flex items-center gap-2">
+            <input
+              type="password"
+              value={keyDraft}
+              onChange={(event) => setKeyDraft(event.target.value)}
+              placeholder="sk-ant-..."
+              aria-label="Your Anthropic API key"
+              className="h-9 flex-1 rounded-md border border-border bg-secondary/40 px-3 font-mono text-xs text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lever"
+            />
+            <button
+              type="button"
+              onClick={saveKey}
+              className="h-9 rounded-md bg-lever px-4 text-xs font-semibold text-background transition-colors hover:bg-lever/90"
+            >
+              Use my key
+            </button>
+          </div>
+          <p className="text-[0.68rem] leading-relaxed text-muted-foreground/70">
+            Your key stays in this browser and is sent only to this site&rsquo;s
+            chat route with your own messages. Get one at
+            console.anthropic.com.
+          </p>
+        </div>
+      )}
+
+      {byokKey && (
+        <p className="border-t border-border px-5 py-2 text-[0.68rem] text-muted-foreground/70">
+          Using your API key from this browser.{" "}
+          <button
+            type="button"
+            onClick={forgetKey}
+            className="underline underline-offset-2 transition-colors hover:text-foreground"
+          >
+            Forget it
+          </button>
         </p>
       )}
     </div>

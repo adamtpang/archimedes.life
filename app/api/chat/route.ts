@@ -55,17 +55,6 @@ function sanitize(input: unknown): ChatMessage[] {
 }
 
 export async function POST(req: Request) {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    return Response.json(
-      {
-        error:
-          "Archimedes is still being wired up. Meanwhile, use Copy Claude prompt in the Diagnose section: it carries your full cure protocol into claude.ai.",
-      },
-      { status: 503 }
-    );
-  }
-
   const ip =
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "anon";
   if (rateLimited(ip, Date.now())) {
@@ -82,7 +71,11 @@ export async function POST(req: Request) {
     return Response.json({ error: "Invalid request." }, { status: 400 });
   }
 
-  const payload = body as { messages?: unknown; scores?: unknown };
+  const payload = body as {
+    messages?: unknown;
+    scores?: unknown;
+    apiKey?: unknown;
+  };
   const messages = sanitize(payload.messages);
   if (messages.length === 0) {
     return Response.json({ error: "Say something first." }, { status: 400 });
@@ -90,6 +83,24 @@ export async function POST(req: Request) {
   const scores: Scores | null = isScores(payload.scores)
     ? payload.scores
     : null;
+
+  // The site key wins. Failing that, a visitor-provided key (kept in their
+  // browser, sent only with their own messages, never stored or logged here).
+  const clientKey =
+    typeof payload.apiKey === "string" &&
+    /^sk-ant-[\w-]{10,}$/.test(payload.apiKey.trim())
+      ? payload.apiKey.trim()
+      : null;
+  const apiKey = process.env.ANTHROPIC_API_KEY || clientKey;
+  if (!apiKey) {
+    return Response.json(
+      {
+        error:
+          "Archimedes has no key yet. Paste your own Anthropic API key below to talk now, or use Copy Claude prompt in the Diagnose section.",
+      },
+      { status: 503 }
+    );
+  }
 
   const anthropic = new Anthropic({ apiKey });
   const stream = anthropic.messages.stream({
@@ -115,9 +126,13 @@ export async function POST(req: Request) {
             controller.enqueue(encoder.encode(event.delta.text));
           }
         }
-      } catch {
+      } catch (err) {
         controller.enqueue(
-          encoder.encode("\n\n[Archimedes hit an error. Try again.]")
+          encoder.encode(
+            err instanceof Anthropic.AuthenticationError
+              ? "\n\n[Anthropic rejected that API key. Check it and paste it again.]"
+              : "\n\n[Archimedes hit an error. Try again.]"
+          )
         );
       } finally {
         controller.close();

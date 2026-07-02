@@ -42,9 +42,11 @@ The `/#chat` section streams from Claude Sonnet 4.6 via a serverless route at
 - Production (Vercel): add `ANTHROPIC_API_KEY` in Project Settings → Environment
   Variables (or `vercel env add ANTHROPIC_API_KEY production`), then redeploy.
 
-Until the key is set, the chat returns a clear "not wired up yet" message and the
-rest of the site is unaffected. The route applies a light in-memory rate limit;
-swap in Vercel KV or Upstash for real enforcement.
+Until the server key is set, the chat offers a bring-your-own-key fallback:
+visitors can paste their own Anthropic key, which stays in their browser
+(localStorage) and is sent only with their own messages. The server key takes
+precedence as soon as it exists. The route applies a light in-memory rate
+limit; swap in Vercel KV or Upstash for real enforcement.
 
 ## Deploy
 
