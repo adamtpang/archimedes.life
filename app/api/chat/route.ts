@@ -60,7 +60,7 @@ export async function POST(req: Request) {
     return Response.json(
       {
         error:
-          "Archimedes is not wired up yet. Set ANTHROPIC_API_KEY in the deployment environment.",
+          "Archimedes is still being wired up. Meanwhile, use Copy Claude prompt in the Diagnose section: it carries your full cure protocol into claude.ai.",
       },
       { status: 503 }
     );
