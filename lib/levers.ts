@@ -1,3 +1,4 @@
+import { ANCHORS } from "./anchors";
 import curesJson from "./cures.json";
 
 export type LeverKey = "code" | "media" | "capital" | "labor";
@@ -254,7 +255,11 @@ Their current diagnosis (0 to 100 each): Code ${scores.code}, Media ${scores.med
 You have their cure protocol for ${lever.name}. First move: ${cure.firstMove} Leading indicator: ${cure.leadingIndicator} The plays:
 ${playLines}
 
-Coach them through this protocol. Reference the specific plays, help them adapt the first move to their situation, and bias every answer toward raising ${lever.name} unless they steer you elsewhere.`;
+Coach them through this protocol. Reference the specific plays, help them adapt the first move to their situation, and bias every answer toward raising ${lever.name} unless they steer you elsewhere.
+
+Reference anchors on the same 0 to 100 scale, with leverage index in parens: ${ANCHORS.map(
+    (anchor) => `${anchor.name} ${leverageIndex(anchor.scores)} (${anchor.tag.toLowerCase()})`
+  ).join(", ")}. Their index is ${index}, so use the anchors for comparison and motivation when helpful, and remind them that most leveraged is not richest.`;
 }
 
 // ─────────────────────────── the cures ───────────────────────────

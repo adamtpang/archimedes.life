@@ -4,6 +4,7 @@ import { ArchimedesChat } from "@/components/archimedes-chat";
 import { CureProtocol } from "@/components/cure-protocol";
 import { Diagnostic } from "@/components/diagnostic";
 import { EmailCapture } from "@/components/email-capture";
+import { LeverageBenchmarks } from "@/components/leverage-benchmarks";
 import { LeverageProvider } from "@/components/leverage-store";
 import { LeverageTracker } from "@/components/leverage-tracker";
 import { FulcrumGlyph, LeverMark } from "@/components/lever-mark";
@@ -275,12 +276,34 @@ export default function Page() {
             <LeverageTracker />
           </div>
         </section>
+
+        {/* ───────────────────── V · the ceiling ───────────────────── */}
+        <section
+          id="ceiling"
+          className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32"
+        >
+          <div className="flex flex-col gap-5">
+            <SectionLabel index="V">The ceiling</SectionLabel>
+            <h2 className="max-w-3xl text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+              How you stack against the most leveraged humans alive.
+            </h2>
+            <p className="max-w-xl text-pretty text-base leading-relaxed text-muted-foreground">
+              Same four levers, same scale. Notice who tops the board: the index
+              rewards maxing all four at once, which is why the richest man on it
+              is not the most leveraged.
+            </p>
+          </div>
+
+          <div className="mt-12 sm:mt-16">
+            <LeverageBenchmarks />
+          </div>
+        </section>
       </LeverageProvider>
 
       {/* ───────────────────── V · talk to archimedes ───────────────────── */}
       <section id="chat" className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32">
         <div className="flex flex-col gap-5">
-          <SectionLabel index="V">Talk to Archimedes</SectionLabel>
+          <SectionLabel index="VI">Talk to Archimedes</SectionLabel>
           <h2 className="max-w-2xl text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
             Coach the constraint in real time.
           </h2>
@@ -301,7 +324,7 @@ export default function Page() {
         className="mx-auto max-w-5xl px-6 py-24 sm:px-8 sm:py-32"
       >
         <div className="mx-auto flex max-w-xl flex-col items-center gap-6 text-center">
-          <SectionLabel index="VI">The clinic</SectionLabel>
+          <SectionLabel index="VII">The clinic</SectionLabel>
           <h2 className="text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
             The guided clinic opens soon.
           </h2>
